@@ -1,106 +1,35 @@
-# Pieces
-S = [['.....',
-      '......',
-      '..00..',
-      '.00...',
-      '.....'],
-     ['.....',
-      '..0..',
-      '..00.',
-      '...0.',
-      '.....']]
+import pygame
+import random
+import thetetris.constants as constants
 
-Z = [['.....',
-      '.....',
-      '.00..',
-      '..00.',
-      '.....'],
-     ['.....',
-      '..0..',
-      '.00..',
-      '.0...',
-      '.....']]
 
-I = [['..0..',
-      '..0..',
-      '..0..',
-      '..0..',
-      '.....'],
-     ['.....',
-      '0000.',
-      '.....',
-      '.....',
-      '.....']]
+class Piece:
+    def __init__(self, x, y, piece):
+        self.x = x
+        self.y = y
+        self.variations = len(constants.pieces[piece])
+        self.piece = constants.pieces[piece]
+        self.color = constants.pieceColors[piece]
+        self.rotation = 0
 
-O = [['.....',
-      '.....',
-      '.00..',
-      '.00..',
-      '.....']]
+    def transform(self, pressedKey):
+        if pressedKey == pygame.K_LEFT:
+            self.x -= 1
 
-J = [['.....',
-      '.0...',
-      '.000.',
-      '.....',
-      '.....'],
-     ['.....',
-      '..00.',
-      '..0..',
-      '..0..',
-      '.....'],
-     ['.....',
-      '.....',
-      '.000.',
-      '...0.',
-      '.....'],
-     ['.....',
-      '..0..',
-      '..0..',
-      '.00..',
-      '.....']]
+        if pressedKey == pygame.K_RIGHT:
+            self.x += 1
 
-L = [['.....',
-      '...0.',
-      '.000.',
-      '.....',
-      '.....'],
-     ['.....',
-      '..0..',
-      '..0..',
-      '..00.',
-      '.....'],
-     ['.....',
-      '.....',
-      '.000.',
-      '.0...',
-      '.....'],
-     ['.....',
-      '.00..',
-      '..0..',
-      '..0..',
-      '.....']]
+        if pressedKey == pygame.K_DOWN:
+            self.y += 1
 
-T = [['.....',
-      '..0..',
-      '.000.',
-      '.....',
-      '.....'],
-     ['.....',
-      '..0..',
-      '..00.',
-      '..0..',
-      '.....'],
-     ['.....',
-      '.....',
-      '.000.',
-      '..0..',
-      '.....'],
-     ['.....',
-      '..0..',
-      '.00..',
-      '..0..',
-      '.....']]
+        if pressedKey == pygame.K_z:
+            self.rotation -= 1
+            self.rotation = self.rotation % self.variations
 
-pieces = [S, Z, I, O, J, L, T]
-piece_colors = [(0, 255, 0), (255, 0, 0), (0, 255, 255),
-                (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
+        if pressedKey == pygame.K_x:
+            self.rotation += 1
+            self.rotation = self.rotation % self.variations
+
+
+def getPiece():
+    return Piece(3, 0, random.randint(0, 6))
