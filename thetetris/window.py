@@ -18,8 +18,14 @@ def updateWindow(window, grid, nextPiece, savedPiece, text):
     # updating main grid
     for i in range(len(grid.cells)):
         for j in range(len(grid.cells[i])):
-            pygame.draw.rect(window, grid.cells[i][j], (constants.topLeftX + (
-                j * constants.unit), constants.topLeftY + (i * constants.unit), constants.unit, constants.unit))
+            s = pygame.Surface((constants.unit, constants.unit))
+            # check if the block needs alpha value
+            if len(grid.cells[i][j]) > 3:
+                s.set_alpha(grid.cells[i][j][3])
+
+            s.fill(grid.cells[i][j])
+            window.blit(s, (constants.topLeftX + (j * constants.unit),
+                            constants.topLeftY + (i * constants.unit)))
 
     # updating next piece
     for i in range(len(nextPiece.piece[0])):
@@ -61,10 +67,6 @@ def updateWindow(window, grid, nextPiece, savedPiece, text):
                i * constants.unit + constants.topLeftY)
         pygame.draw.line(window, constants.unbreakableColor, start, end)
 
-    s = pygame.Surface((30, 30))
-    s.set_alpha(128)
-    s.fill((255, 0, 0))
-    window.blit(s, (0, 0))
     # updating text
     window.blit(text, (constants.width // 2 - text.get_width() //
                        2, 50 - text.get_height() // 2))

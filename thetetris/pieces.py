@@ -14,13 +14,7 @@ class Piece:
         self.rotation = rotation
 
         # calculate the width and height of the piece
-        minX = 5
-        maxX = 0
-        for row in self.piece[self.rotation]:
-            minX = min(minX, row.find('0'))
-            maxX = max(maxX, row.rfind('0'))
-        self.width = maxX - minX + 1
-        self.height = len(self.piece[self.rotation])
+        self.calculateSize()
 
     def tick(self, placedBlocks):
         placed = False
@@ -39,14 +33,18 @@ class Piece:
     """
 
     def _checkCollision(self, placedBlocks):
+        # ensure the width and height are correct
+        self.calculateSize()
 
-        if self.x < self.width - len(self.piece[self.rotation][0]):
-            self.x = self.width - len(self.piece[self.rotation][0])
+        if self.x < -self.leftStart:
+            self.x = -self.leftStart
 
-        if self.x > constants.columns - len(self.piece[self.rotation][0]):
-            self.x = constants.columns - len(self.piece[self.rotation][0])
+        if self.x > constants.columns - self.width - self.leftStart:
+            self.x = constants.columns - self.width - self.leftStart
 
-        if self.y > constants.rows - self.height:
+        print("({}, {})".format(self.x, self.y))
+
+        if self.y > constants.rows - self.height - self.topStart:
             return True
 
         p = self.piece[self.rotation]
@@ -57,6 +55,26 @@ class Piece:
                     return True
 
         return False
+
+    def calculateSize(self):
+        # calculate the width and height of the piece
+        minX = 4
+        maxX = 0
+        height = 0
+        minY = 0
+        for row in self.piece[self.rotation]:
+            if row != '.....':
+                minX = min(minX, row.find('0'))
+                maxX = max(maxX, row.rfind('0'))
+                height += 1
+        for row in self.piece[self.rotation]:
+            if row != '.....':
+                break
+            minY += 1
+        self.width = maxX - minX + 1
+        self.height = height
+        self.leftStart = minX
+        self.topStart = minY
 
     """
     transform returns true if the piece is placed
@@ -106,21 +124,13 @@ class Piece:
             placed = True
             mock = self.getLandingPlace(placedBlocks)
             self.y = mock.y
-
-        # calculate the width and height of the piece
-        minX = 5
-        maxX = 0
-        for row in self.piece[self.rotation]:
-            minX = min(minX, row.find('0'))
-            maxX = max(maxX, row.rfind('0'))
-        self.width = maxX - minX + 1
-        self.height = len(self.piece[self.rotation])
+        self.calculateSize()
 
         return placed
 
     # TODO: need to catch the case where we can put the piece under the existing ones
     def getLandingPlace(self, placedBlocks):
-        mock = Piece(self.x, 0, self.type, self.rotation)
+        mock = Piece(self.x, self.y, self.type, self.rotation)
         while not mock._checkCollision(placedBlocks):
             mock.y += 1
         mock.y -= 1

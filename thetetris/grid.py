@@ -21,7 +21,7 @@ class Grid:
         p = piece.piece[piece.rotation]
         for i in range(len(p)):
             for j in range(len(p[i])):
-                if p[i][j] == '0':
+                if p[i][j] == '0' and i + piece.y >= 0:
                     self.cells[i + piece.y][j + piece.x] = piece.color
 
         # draw the mock piece

@@ -15,8 +15,10 @@ def run():
     g = grid.Grid()
 
     # pieces
-    curPiece = pieces.getPiece()
-    nextPiece = pieces.getPiece()
+    # curPiece = pieces.getPiece()
+    # nextPiece = pieces.getPiece()
+    curPiece = pieces.Piece(3, -1, 6, 0)
+    nextPiece = pieces.Piece(3, -1, 6, 0)
     savedPiece = None
 
     # spaces that are already occupied
