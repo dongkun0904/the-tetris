@@ -8,14 +8,30 @@ class Grid:
         self.cells = [[(0, 0, 0) for row in range(constants.columns)]
                       for col in range(constants.rows)]
 
-    def updateGrid(self, piece):
+    def updateGrid(self, placed, piece):
+        # reset the grid
         self.cells = [[(0, 0, 0) for row in range(constants.columns)]
                       for col in range(constants.rows)]
+
+        # placed pieces
+        for cell in placed:
+            self.cells[cell[1]][cell[0]] = placed[cell]
+
+        # floating piece
         p = piece.piece[piece.rotation]
         for i in range(len(p)):
             for j in range(len(p[i])):
                 if p[i][j] == '0':
                     self.cells[i + piece.y][j + piece.x] = piece.color
+
+        # draw the mock piece
+        mock = piece.getLandingPlace(placed)
+        mock.color = constants.mockColors[mock.type]
+        m = mock.piece[mock.rotation]
+        for i in range(len(m)):
+            for j in range(len(m[i])):
+                if m[i][j] == '0':
+                    self.cells[i + mock.y][j + mock.x] = mock.color
 
     def _checkEmptyRow(self, i):
         for cell in self.cells[i]:
@@ -40,3 +56,11 @@ class Grid:
         # add unbreakable blocks at the end
         for i in range(n):
             self._addRow(constants.rows - i - 1)
+
+
+def lost(placedBlocks):
+    for block in placedBlocks:
+        if block[0] >= constants.rows:
+            return True
+
+    return False
