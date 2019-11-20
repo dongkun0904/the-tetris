@@ -15,10 +15,8 @@ def run():
     g = grid.Grid()
 
     # pieces
-    # curPiece = pieces.getPiece()
-    # nextPiece = pieces.getPiece()
-    curPiece = pieces.Piece(3, -1, 6, 0)
-    nextPiece = pieces.Piece(3, -1, 6, 0)
+    curPiece = pieces.getPiece()
+    nextPiece = pieces.getPiece()
     savedPiece = None
 
     # spaces that are already occupied
@@ -33,12 +31,22 @@ def run():
     startTime = time.time()
     while run:
         clock.tick(60)
-        if time.time() - startTime >= 0.5:
+        if time.time() - startTime >= 1:
+
+            # check if curPiece is placed
             if curPiece.tick(placed):
                 curPiece.registerPiece(placed)
                 curPiece = nextPiece
                 nextPiece = pieces.getPiece()
                 usedSave = False
+
+                # check if we cannot place a new piece
+                if curPiece.checkCollision(placed):
+                    run = False
+                    pygame.display.quit()
+                    print("You lost")
+                    break
+
             startTime = time.time()
 
         g.updateGrid(placed, curPiece)
@@ -63,19 +71,23 @@ def run():
                     curPiece = nextPiece
                     nextPiece = pieces.getPiece()
                 savedPiece = p
-                savedPiece.x = 3
-                savedPiece.y = 0
+                savedPiece.x = constants.initialX
+                savedPiece.y = constants.initialY
                 continue
 
+            # check if curPiece is placed
             if curPiece.transform(pressedKey, placed):
                 curPiece.registerPiece(placed)
                 curPiece = nextPiece
                 nextPiece = pieces.getPiece()
                 usedSave = False
+                startTime = time.time()
 
-            if grid.lost(placed):
-                run = False
-                pygame.display.quit()
-                print("You lost")
+                # check if we cannot place a new piece
+                if curPiece.checkCollision(placed):
+                    run = False
+                    pygame.display.quit()
+                    print("You lost")
+                    break
 
     pygame.quit()

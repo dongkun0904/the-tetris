@@ -8,6 +8,7 @@ class Grid:
         self.cells = [[(0, 0, 0) for row in range(constants.columns)]
                       for col in range(constants.rows)]
 
+    # TODO: Overwrite the color of mocked on with the real one when they overlap
     def updateGrid(self, placed, piece):
         # reset the grid
         self.cells = [[(0, 0, 0) for row in range(constants.columns)]
@@ -56,11 +57,3 @@ class Grid:
         # add unbreakable blocks at the end
         for i in range(n):
             self._addRow(constants.rows - i - 1)
-
-
-def lost(placedBlocks):
-    for block in placedBlocks:
-        if block[0] >= constants.rows:
-            return True
-
-    return False
