@@ -2,13 +2,15 @@
 
 import socket
 
+import constants
+
 
 class Server:
 
     def __init__(self, req_code):
         # Global variable
-        self.BUFFER_SIZE = 1024
-        self.server_address = ""
+        self.BUFFER_SIZE = constants.BUFFER_SIZE
+        self.server_address = constants.server_ip
         self.playing = True
         self.req_code = req_code
         self.conn = None
@@ -22,7 +24,7 @@ class Server:
             exit()
 
         # Bind with port number 54241 (or any forwarded port)
-        self.neg_socket.bind((self.server_address, 54241))
+        self.neg_socket.bind((self.server_address, constants.r_port))
 
     def server_negotiation(self):
 
@@ -74,7 +76,7 @@ class Server:
 
 def start_server(grid, queue):
 
-    o = Server(13)
+    o = Server(constants.req_code)
 
     while True:
         # Wait for a client to connect

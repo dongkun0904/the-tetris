@@ -2,13 +2,16 @@
 
 import socket
 
+import constants
+
 
 class Client:
 
-    def __init__(self, server_address, req_code):
+    def __init__(self, server_address, r_port, req_code):
         # Global Variable
-        self.BUFFER_SIZE = 1024
+        self.BUFFER_SIZE = constants.BUFFER_SIZE
         self.server_address = server_address
+        self.r_port = r_port
         self.req_code = req_code
         self.neg_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.keepPlaying = True
@@ -31,7 +34,7 @@ class Client:
 
         # Check if the server is up
         try:
-            self.neg_socket.connect((self.server_address, 54241))
+            self.neg_socket.connect((self.server_address, self.r_port))
         except socket.error as e:
             if e.errno == 111:
                 print("Cannot connect to the server.")
@@ -68,7 +71,7 @@ class Client:
 
 
 def connect_client(grid, queue):
-    o = Client('219.240.136.145', 13)
+    o = Client(constants.server_ip, constants.r_port, constants.req_code)
 
     # Negotiation step
     resp = o.client_negotiation()
