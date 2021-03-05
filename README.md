@@ -3,6 +3,7 @@ Two player Tetris game
 
 # To clone the repo
 - Make sure the public ssh key is generated and added properly
+
 ```git clone https://dongkun0904@github.com/dongkun0904/thetetris.git```
 
 # To start the game, run
