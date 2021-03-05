@@ -1,11 +1,15 @@
 # the-tetris
 Two player Tetris game
 
-# to start the game, run
+# To clone the repo
+- Make sure the public ssh key is generated and added properly
+```git clone https://dongkun0904@github.com/dongkun0904/thetetris.git```
+
+# To start the game, run
 ```python3 -m thetetris```
 
-# before running the code, run
+# Before running the code, run
 ```pip3 install -r requirements.txt```
 
-# after downloading new modules
+# After downloading new modules
 ```pip3 freeze > requirements.txt```
